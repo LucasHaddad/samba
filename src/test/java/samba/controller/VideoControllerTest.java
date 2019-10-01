@@ -42,34 +42,48 @@ class VideoControllerTest {
 
     @AfterEach
     void tearDown() {
-        restTemplate.deleteForObject("http://localhost:" + port + "/videos");
+        restTemplate.delete("http://localhost:" + port + "/videos");
     }
 
     @Test
     void postVideos() {
-        Map response = restTemplate.postForObject("http://localhost:" + port + "/videos", Map.class);
+        long now = new System.currentTimeMillis();
+        Map<String, Object> body = Map.of(
+            "duration", 200.0,
+            "timestamp", (now - 30),
+        );
+        Map<String, Object> response = restTemplate.postForObject("http://localhost:" + port + "/videos", body, Map.class);
         assertEquals(200, response.get("status"));
-        assertEquals(Map.of(), response.get("body"));
     }
 
     @Test
     void postVideosError() {
-        Map response = restTemplate.postForObject("http://localhost:" + port + "/videos", Map.class);
+        long now = new System.currentTimeMillis();
+        Map<String, Object> body = Map.of(
+            "duration", 200.0,
+            "timestamp", (now - 70),
+        );
+        Map<String, Object> response = restTemplate.postForObject("http://localhost:" + port + "/videos", Map.class);
         assertEquals(500, response.get("status"));
-        assertEquals(Map.of(), response.get("body"));
     }
 
     @Test
     void deleteVideos() {
-        Map response = restTemplate.deleteForObject("http://localhost:" + port + "/videos", Map.class);
+        Map<String, Object> response = restTemplate.deleteForObject("http://localhost:" + port + "/videos", Map.class);
         assertEquals(200, response.get("status"));
-        assertEquals(Map.of(), response.get("body"));
     }
 
     @Test
-    void statistics() {
-        Map response = restTemplate.getForObject("http://localhost:" + port + "/statistics", Map.class);
+    void getStatistics() {
+        Map<String, Object> response = restTemplate.getForObject("http://localhost:" + port + "/statistics", Map.class);
+        Map<String, Object> expected = Map.of(
+            "sum", 100.0,
+            "avg", 100.0,
+            "max", 100.0,
+            "min", 100.0,
+            "count", 1
+        );
         assertEquals(200, response.get("status"));
-        assertEquals(Map.of(), response.get("body"));
+        assertEquals(expected, response.get("body"));
     }
 }

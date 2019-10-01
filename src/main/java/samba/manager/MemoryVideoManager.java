@@ -39,15 +39,11 @@ public class Memory {
 
     /**
      * Caches the given item at the end of the cached list.
-     * @param VideoDTO The item to cache.
+     * @param item The item to cache.
      */
     public static void add(VideoDTO item) {
         cached.add(item);
         lastIndex++;
-    }
-
-    public static List<VideoDTO> getAll() {
-        return cached;
     }
 
     /**
