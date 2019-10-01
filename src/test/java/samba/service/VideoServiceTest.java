@@ -1,7 +1,10 @@
-package samba.manager;
+package samba.service;
 
 import samba.dto.VideoDTO;
+import samba.manager.MemoryVideoManager;
 import samba.exception.VideoPersistingException;
+
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,17 +13,17 @@ import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class MemoryVideoManagerTest {
+class VideoServiceTest {
     
     private VideoService service = new VideoService();
     
     @BeforeEach
     void setUp() {
-        MemoryVideoManager.add(new VideoDTO(10, 1));
-        MemoryVideoManager.add(new VideoDTO(20, 2));
-        MemoryVideoManager.add(new VideoDTO(30, 3));
-        MemoryVideoManager.add(new VideoDTO(40, 4));
-        MemoryVideoManager.add(new VideoDTO(50, 5));
+        MemoryVideoManager.add(new VideoDTO(10.0, 1L));
+        MemoryVideoManager.add(new VideoDTO(20.0, 2L));
+        MemoryVideoManager.add(new VideoDTO(30.0, 3L));
+        MemoryVideoManager.add(new VideoDTO(40.0, 4L));
+        MemoryVideoManager.add(new VideoDTO(50.0, 5L));
     }    
     
     @AfterEach
@@ -44,15 +47,16 @@ class MemoryVideoManagerTest {
     }
 
     @Test
-    void save() {
-        service.save(new VideoDTO(60, 6), 70);
+    void save() throws VideoPersistingException {
+        service.save(new VideoDTO(60.0, 6L), 70L);
         assertEquals(60, MemoryVideoManager.getCachedVideos().get(5).getDuration(), "The duration of the 5th item must be 60.");
     }
 
     @Test
-    void createWithException() {
-        assertThrows(VideoPersistingException.class);
-        service.create(new VideoDTO(60, 6), 80);
+    void saveWithException() {
+        assertThrows(VideoPersistingException.class, () -> { 
+            service.save(new VideoDTO(60.0, 6L), 80L);
+        });
     }
 
     @Test

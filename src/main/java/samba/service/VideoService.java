@@ -5,20 +5,20 @@ import java.util.Map;
 
 import samba.manager.MemoryVideoManager;
 import samba.dto.VideoDTO;
-import samba.exception.VideoInsertingException;
+import samba.exception.VideoPersistingException;
 
 /**
  * Defines the video service.
  */
-class VideoService {
+public class VideoService {
     /**
      * Stores the given video as a register in the cache.
      * @param item The item to be stored.
      * @param timestamp The timestamp to compare.
-     * @throws VideoInsertingException Thrown when the timestamp is lower than the last 60 seconds.
+     * @throws VideoPersistingException Thrown when the timestamp is lower than the last 60 seconds.
      */
-    public void save(VideoDTO item, long timestamp) throws VideoInsertingException {
-        if (item.getTimestamp() < timestamp) throw new VideoInsertingException(); 
+    public void save(VideoDTO item, long timestamp) throws VideoPersistingException {
+        if (item.getTimestamp() < timestamp) throw new VideoPersistingException(); 
         MemoryVideoManager.add(item);
     }
 
@@ -53,7 +53,7 @@ class VideoService {
      * @param timestamp The timestamp to filter the subList.
      * @return A Map containing the statistics.
      */
-    public Map<String, Double> getStatistics(long timestamp) {
+    public Map<String, Object> getStatistics(long timestamp) {
         double sum = 0, max = 0, min = 0;
         int count = 0;
 
@@ -74,5 +74,7 @@ class VideoService {
                 count++;
             }
         }
+
+        return null;
     }
 }

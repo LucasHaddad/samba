@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 /**
  * Defines the video controller.
  */
@@ -27,7 +30,7 @@ public class VideoController {
      * Retrieves the millis correspondent of the last 60 seconds as long.
      * @return A long correspondent of the current time minus 60 seconds.
      */
-    private getLastMinuteInMillis() {
+    private long getLastMinuteInMillis() {
         return System.currentTimeMillis() - 60;
     }
 
@@ -56,8 +59,8 @@ public class VideoController {
         try {
             service.save(video, getLastMinuteInMillis());
             return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (VideoInsertingException exception) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, excpetion.getMessage(), exception);
+        } catch (VideoPersistingException exception) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, exception.getMessage(), exception);
         }
     } 
 

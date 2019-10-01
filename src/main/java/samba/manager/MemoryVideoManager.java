@@ -1,15 +1,15 @@
-package samba.cache;
+package samba.manager;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
-import samba.model.VideoDTO;
+import samba.dto.VideoDTO;
 
 /**
  * In memory cache stateful service class.
  */
-public class Memory {
+public class MemoryVideoManager {
     /**
      * The list of cached videos.
      */

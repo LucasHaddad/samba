@@ -1,4 +1,4 @@
-package samba.manager;
+package samba.controller;
 
 import samba.dto.VideoDTO;
 import samba.App;
@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ class VideoControllerTest {
             "http://localhost:" + port + "/videos", 
             Map.of(
                 "duration", 100.0,
-                "timestamp", new System.currentTimeMillis()
+                "timestamp", System.currentTimeMillis()
             ), 
             Map.class
         );
@@ -47,35 +48,29 @@ class VideoControllerTest {
 
     @Test
     void postVideos() {
-        long now = new System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         Map<String, Object> body = Map.of(
             "duration", 200.0,
-            "timestamp", (now - 30),
+            "timestamp", (now - 30)
         );
-        Map<String, Object> response = restTemplate.postForObject("http://localhost:" + port + "/videos", body, Map.class);
-        assertEquals(200, response.get("status"));
+        Map response = restTemplate.postForObject("http://localhost:" + port + "/videos", body, Map.class);
+        assertEquals(201, response.get("status"), "The status should be 201.");
     }
 
     @Test
     void postVideosError() {
-        long now = new System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         Map<String, Object> body = Map.of(
             "duration", 200.0,
-            "timestamp", (now - 70),
+            "timestamp", (now - 70)
         );
-        Map<String, Object> response = restTemplate.postForObject("http://localhost:" + port + "/videos", Map.class);
-        assertEquals(500, response.get("status"));
-    }
-
-    @Test
-    void deleteVideos() {
-        Map<String, Object> response = restTemplate.deleteForObject("http://localhost:" + port + "/videos", Map.class);
-        assertEquals(200, response.get("status"));
+        Map response = restTemplate.postForObject("http://localhost:" + port + "/videos", body, Map.class);
+        assertEquals(204, response.get("status"), "The status should be 204.");
     }
 
     @Test
     void getStatistics() {
-        Map<String, Object> response = restTemplate.getForObject("http://localhost:" + port + "/statistics", Map.class);
+        Map response = restTemplate.getForObject("http://localhost:" + port + "/statistics", Map.class);
         Map<String, Object> expected = Map.of(
             "sum", 100.0,
             "avg", 100.0,
@@ -83,7 +78,7 @@ class VideoControllerTest {
             "min", 100.0,
             "count", 1
         );
-        assertEquals(200, response.get("status"));
-        assertEquals(expected, response.get("body"));
+        assertEquals(200, response.get("status"), "The status should be 200.");
+        assertEquals(expected, response.get("body"), "The body should be equals the expected one.");
     }
 }
