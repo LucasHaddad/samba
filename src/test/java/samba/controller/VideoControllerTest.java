@@ -40,23 +40,36 @@ class VideoControllerTest {
         );
     }
 
+    @AfterEach
+    void tearDown() {
+        restTemplate.deleteForObject("http://localhost:" + port + "/videos");
+    }
+
     @Test
     void postVideos() {
         Map response = restTemplate.postForObject("http://localhost:" + port + "/videos", Map.class);
+        assertEquals(200, response.get("status"));
+        assertEquals(Map.of(), response.get("body"));
     }
 
     @Test
     void postVideosError() {
         Map response = restTemplate.postForObject("http://localhost:" + port + "/videos", Map.class);
+        assertEquals(500, response.get("status"));
+        assertEquals(Map.of(), response.get("body"));
     }
 
     @Test
     void deleteVideos() {
         Map response = restTemplate.deleteForObject("http://localhost:" + port + "/videos", Map.class);
+        assertEquals(200, response.get("status"));
+        assertEquals(Map.of(), response.get("body"));
     }
 
     @Test
     void statistics() {
         Map response = restTemplate.getForObject("http://localhost:" + port + "/statistics", Map.class);
+        assertEquals(200, response.get("status"));
+        assertEquals(Map.of(), response.get("body"));
     }
 }
